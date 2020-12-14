@@ -8,5 +8,5 @@ public class dThread {
 	private String url;
 	private String title;
 	private Date time;
-	private List<Mutter> mutter = new ArrayList<Mutter>();
+	private List<Mutter> mutterList = new ArrayList<Mutter>();
 }
