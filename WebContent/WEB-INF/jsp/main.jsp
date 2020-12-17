@@ -4,7 +4,7 @@
 <%
 User loginUser = (User)session.getAttribute("loginUser");
 
-List<Mutter> mutterList = (List<Mutter>)application.getAttribute("mutterList");
+List<Mutter> mutterList = (List<Mutter>)request.getAttribute("mutterList");
 
 String errorMsg = (String)request.getAttribute("errorMsg");
 %>
