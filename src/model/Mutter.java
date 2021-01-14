@@ -1,17 +1,17 @@
 package model;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Mutter implements Serializable {
 	private String userName;
 	private String text;
-	private Date time;
+	private Timestamp time;
 	private int id;
 
 	public Mutter() {}
-	public Mutter(int id, String userName, String text, Date time) {
+	public Mutter(int id, String userName, String text, Timestamp time) {
 		this.userName = userName;
 		this.text = text;
 		this.time = time;
@@ -27,7 +27,9 @@ public class Mutter implements Serializable {
 		date = df.format(time).toString();
 		return date;
 	}
-	public Date getDate() {
+	//
+	public Timestamp getDate() {
+		//
 		return time;
 	}
 

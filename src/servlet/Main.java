@@ -1,7 +1,7 @@
 package servlet;
 
 import java.io.IOException;
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -19,8 +19,9 @@ import model.User;
 
 @WebServlet("/Main")
 public class Main extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 
+	private static final long serialVersionUID = 1L;
+	private int i;
 	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		GetMutterListLogic getMutterListLogic = new GetMutterListLogic();
@@ -40,10 +41,18 @@ public class Main extends HttpServlet {
 		}
 	}
 
+
+
+
+	//つぶやき機能
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		String text = request.getParameter("text");
-		Date now = new Date();
+		Timestamp now = new Timestamp(System.currentTimeMillis());
+
+		GetMutterListLogic getMutterListLogic = new GetMutterListLogic();
+		//最新のデータベースを取得する
+		List<Mutter> mutterList = getMutterListLogic.execute();
 
 		if(text != null && text.length() != 0) {
 			HttpSession session = request.getSession();
@@ -53,7 +62,8 @@ public class Main extends HttpServlet {
 			}
 			User loginUser = (User)session.getAttribute("loginUser");
 
-			Mutter mutter = new Mutter(0,loginUser.getName(), text, now);
+
+			Mutter mutter = new Mutter(mutterList.size(),loginUser.getName(), text, now);
 			PostMutterLogic postMutterLogic = new PostMutterLogic();
 			postMutterLogic.execute(mutter);
 
@@ -61,8 +71,9 @@ public class Main extends HttpServlet {
 			request.setAttribute("errorMsg", "つぶやきが入力されていません");
 		}
 
-		GetMutterListLogic getMutterListLogic = new GetMutterListLogic();
-		List<Mutter> mutterList = getMutterListLogic.execute();
+		//最新のデータベースを取得する
+		mutterList = getMutterListLogic.execute();
+		//mutterListをセッションスコープに入れる
 		request.setAttribute("mutterList", mutterList);
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main.jsp");
