@@ -21,7 +21,6 @@ public class MutterDAO {
 		try(Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
 			String sql = "SELECT ID, NAME, TEXT, TIME FROM MUTTER ORDER BY ID DESC";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
-
 			ResultSet rs = pStmt.executeQuery();
 
 
@@ -43,6 +42,8 @@ public class MutterDAO {
 	public boolean create(Mutter mutter) {
 		try(Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)){
 			String sql = "INSERT INTO MUTTER(ID, NAME, TEXT, TIME) VALUES (?, ?, ?, ?)";
+
+
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 
 			pStmt.setInt(1, mutter.getId());
@@ -51,6 +52,14 @@ public class MutterDAO {
 			pStmt.setTimestamp(4, mutter.getDate());
 
 			int result = pStmt.executeUpdate();
+
+			/*
+			 * テスト用
+			 */
+			String test = "CREATE TABLE TEST(ID INT);";
+			PreparedStatement pStmt1 = conn.prepareStatement(test);
+			int test_result = pStmt1.executeUpdate();
+
 			if(result != 1) {
 				return false;
 			}
