@@ -40,17 +40,20 @@ public class dThreadDAO {
 
 	public boolean create(dThread thread) {
 		try(Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)){
+			int threadId=thread.getId();
+
 			String sql = "INSERT INTO DTHREAD(ID, DTITLE, DTIME) VALUES (?, ?, ?)";
+			String createsql = "CREATE TABLE MUTTER"+ threadId + "( ID INT PRIMARY KEY NOT NULL, NAME VARCHAR(255) NOT NULL, TEXT VARCHAR(255) NOT NULL, TIME TIMESTAMP NOT NULL);";
 
 
 			PreparedStatement pStmt = conn.prepareStatement(sql);
-
+			PreparedStatement createStmt = conn.prepareStatement(createsql);
 			pStmt.setInt(1, thread.getId());
 			pStmt.setString(2, thread.getTitle());
 			pStmt.setTimestamp(3, thread.getData());
 
 			int result = pStmt.executeUpdate();
-
+			int result1 = createStmt.executeUpdate();
 
 
 			if(result != 1) {

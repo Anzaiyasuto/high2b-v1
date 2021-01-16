@@ -21,11 +21,18 @@ import model.User;
 public class Main extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	private int i;
+	private int id;
 	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//スレッド名に対応するIDを取得する
+		request.setCharacterEncoding("UTF-8");
+		String temp = request.getParameter("id");
+		id	= Integer.parseInt(temp);
+
+
+
 		GetMutterListLogic getMutterListLogic = new GetMutterListLogic();
-		List<Mutter> mutterList = getMutterListLogic.execute();
+		List<Mutter> mutterList = getMutterListLogic.execute(id);
 		request.setAttribute("mutterList", mutterList);
 
 		HttpSession session = request.getSession();
@@ -36,6 +43,8 @@ public class Main extends HttpServlet {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/error.jsp");
 			dispatcher.forward(request, response);
 		} else {
+
+
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main.jsp");
 			dispatcher.forward(request, response);
 		}
@@ -52,7 +61,7 @@ public class Main extends HttpServlet {
 
 		GetMutterListLogic getMutterListLogic = new GetMutterListLogic();
 		//最新のデータベースを取得する
-		List<Mutter> mutterList = getMutterListLogic.execute();
+		List<Mutter> mutterList = getMutterListLogic.execute(id);
 
 		if(text != null && text.length() != 0) {
 			HttpSession session = request.getSession();
@@ -65,14 +74,14 @@ public class Main extends HttpServlet {
 
 			Mutter mutter = new Mutter(mutterList.size(),loginUser.getName(), text, now);
 			PostMutterLogic postMutterLogic = new PostMutterLogic();
-			postMutterLogic.execute(mutter);
+			postMutterLogic.execute(mutter,id);
 
 		} else {
 			request.setAttribute("errorMsg", "つぶやきが入力されていません");
 		}
 
 		//最新のデータベースを取得する
-		mutterList = getMutterListLogic.execute();
+		mutterList = getMutterListLogic.execute(id);
 		//mutterListをセッションスコープに入れる
 		request.setAttribute("mutterList", mutterList);
 

@@ -16,10 +16,10 @@ public class MutterDAO {
 	private final String DB_USER = "sa";
 	private final String DB_PASS = "abcd";
 
-	public List<Mutter> findall() {
+	public List<Mutter> findall(int threadId) {
 		List<Mutter> mutterList = new ArrayList<>();
 		try(Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
-			String sql = "SELECT ID, NAME, TEXT, TIME FROM MUTTER ORDER BY ID DESC";
+			String sql = "SELECT ID, NAME, TEXT, TIME FROM MUTTER"+threadId +" ORDER BY ID DESC";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			ResultSet rs = pStmt.executeQuery();
 
@@ -39,9 +39,9 @@ public class MutterDAO {
 		return mutterList;
 	}
 
-	public boolean create(Mutter mutter) {
+	public boolean create(Mutter mutter, int id) {
 		try(Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)){
-			String sql = "INSERT INTO MUTTER(ID, NAME, TEXT, TIME) VALUES (?, ?, ?, ?)";
+			String sql = "INSERT INTO MUTTER" + id + "(ID, NAME, TEXT, TIME) VALUES (?, ?, ?, ?)";
 
 
 			PreparedStatement pStmt = conn.prepareStatement(sql);
@@ -56,9 +56,9 @@ public class MutterDAO {
 			/*
 			 * テスト用
 			 */
-			String test = "CREATE TABLE TEST(ID INT);";
-			PreparedStatement pStmt1 = conn.prepareStatement(test);
-			int test_result = pStmt1.executeUpdate();
+			//String test = "CREATE TABLE TEST(ID INT);";
+			//PreparedStatement pStmt1 = conn.prepareStatement(test);
+			//int test_result = pStmt1.executeUpdate();
 
 			if(result != 1) {
 				return false;
