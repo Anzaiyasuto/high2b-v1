@@ -76,7 +76,7 @@ public class Main extends HttpServlet {
 			PostMutterLogic postMutterLogic = new PostMutterLogic();
 			postMutterLogic.execute(mutter,id);
 
-		} else {
+		} else if(text != null){
 			request.setAttribute("errorMsg", "つぶやきが入力されていません");
 		}
 

@@ -20,7 +20,10 @@ String errorMsg = (String)request.getAttribute("errorMsg");
 <%= loginUser.getName() %>さん、ログイン中
 <a href="/docoTsubu/Logout">ログアウト</a>
 </p>
-<p><a href="/docoTsubu/Main">更新</a></p>
+<form action="/docoTsubu/Main" method="post">
+<input type="submit" value="更新">
+</form>
+
 <form action="/docoTsubu/Main" method="post">
 <input type="text" name="text">
 <input type="submit" value="つぶやく">
