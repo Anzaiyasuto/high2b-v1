@@ -78,6 +78,7 @@ public class Main extends HttpServlet {
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main.jsp");
 		dispatcher.forward(request, response);
+		//2021/01/1614:54
 	}
 
 	public static void main(String[] args) {
