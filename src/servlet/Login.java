@@ -59,7 +59,7 @@ public class Login extends HttpServlet {
 
 		String dTitle = request.getParameter("dTitle");
 
-		//**//
+		//**//////
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/loginResult.jsp");
 		dispatcher.forward(request, response);
