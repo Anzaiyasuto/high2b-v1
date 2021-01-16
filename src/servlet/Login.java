@@ -1,6 +1,8 @@
 package servlet;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,8 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import model.GetThreadListLogic;
 import model.LoginLogic;
+import model.PostThreadLogic;
 import model.User;
+import model.dThread;
 
 
 /**
@@ -38,7 +43,7 @@ public class Login extends HttpServlet {
 		// TODO Auto-generated method stub
 		request.setCharacterEncoding("UTF-8");
 
-		//**//
+
 		HttpSession session = request.getSession();
 
 		if(session.getAttribute("loginUser")==null)
@@ -55,14 +60,40 @@ public class Login extends HttpServlet {
 				//**//
 				session.setAttribute("loginUser", user);
 			}
+		} else {
+
+			GetThreadListLogic getThreadListLogic = new GetThreadListLogic();
+			List<dThread> threadList = getThreadListLogic.execute();
+
+
+			String dTitle = request.getParameter("dTitle");
+			if(dTitle != null && dTitle.length() != 0) {
+				Timestamp now = new Timestamp(System.currentTimeMillis());
+				dThread thread = new dThread(threadList.size(),dTitle,now);
+
+				PostThreadLogic postThreadLogic = new PostThreadLogic();
+				postThreadLogic.execute(thread);
+			} else if (dTitle != null && dTitle.length() == 0){
+
+				request.setAttribute("errorMsg", "スレッド名が入力されていません");
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/CreateThread.jsp");
+				dispatcher.forward(request, response);
+				return;
+			}
 		}
 
-		String dTitle = request.getParameter("dTitle");
+		//session.setAttribute("dTitle", dTitle);
 
-		//**//////
+
+		//最新のDTHREADデータベースを取得する
+		GetThreadListLogic getThreadListLogic = new GetThreadListLogic();
+		List<dThread> threadList = getThreadListLogic.execute();
+
+		request.setAttribute("threadList", threadList);
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/loginResult.jsp");
 		dispatcher.forward(request, response);
+
 	}
 
 }
