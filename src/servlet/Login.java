@@ -37,20 +37,29 @@ public class Login extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		request.setCharacterEncoding("UTF-8");
-		String name = request.getParameter("name");
-		String pass = request.getParameter("pass");
+
+		//**//
+		HttpSession session = request.getSession();
+
+		if(session.getAttribute("loginUser")==null)
+		{
+			String name = request.getParameter("name");
+			String pass = request.getParameter("pass");
+
+			User user = new User(name,pass);
+
+			LoginLogic loginLogic = new LoginLogic();
+			boolean isLogin = loginLogic.execute(user);
+
+			if(isLogin) {
+				//**//
+				session.setAttribute("loginUser", user);
+			}
+		}
 
 		String dTitle = request.getParameter("dTitle");
 
-		User user = new User(name,pass);
-
-		LoginLogic loginLogic = new LoginLogic();
-		boolean isLogin = loginLogic.execute(user);
-
-		if(isLogin) {
-			HttpSession session = request.getSession();
-			session.setAttribute("loginUser", user);
-		}
+		//**//////
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/loginResult.jsp");
 		dispatcher.forward(request, response);
