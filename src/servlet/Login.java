@@ -40,6 +40,8 @@ public class Login extends HttpServlet {
 		String name = request.getParameter("name");
 		String pass = request.getParameter("pass");
 
+		String dTitle = request.getParameter("dTitle");
+
 		User user = new User(name,pass);
 
 		LoginLogic loginLogic = new LoginLogic();
