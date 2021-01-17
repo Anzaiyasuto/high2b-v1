@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import model.GetThreadListLogic;
 import model.LoginLogic;
+import model.PostThreadLogic;
 import model.User;
 import model.dThread;
 
@@ -76,7 +78,30 @@ public class LoginServlet extends HttpServlet {
 				//**//
 				session.setAttribute("loginUser", user);
 			}
+		} else {
+
+			GetThreadListLogic getThreadListLogic = new GetThreadListLogic();
+			List<dThread> threadList = getThreadListLogic.execute();
+
+
+			String dTitle = request.getParameter("dTitle");
+			if(dTitle != null && dTitle.length() != 0) {
+				Timestamp now = new Timestamp(System.currentTimeMillis());
+				dThread thread = new dThread(threadList.size(),dTitle,now);
+
+				PostThreadLogic postThreadLogic = new PostThreadLogic();
+				postThreadLogic.execute(thread);
+			} else if (dTitle != null && dTitle.length() == 0){
+
+				request.setAttribute("errorMsg", "スレッド名が入力されていません");
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/CreateThread.jsp");
+				dispatcher.forward(request, response);
+				return;
+			}
 		}
+
+		//session.setAttribute("dTitle", dTitle);
+
 
 		//最新のDTHREADデータベースを取得する
 		GetThreadListLogic getThreadListLogic = new GetThreadListLogic();
