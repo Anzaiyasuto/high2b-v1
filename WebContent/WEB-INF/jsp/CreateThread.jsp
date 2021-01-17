@@ -12,7 +12,7 @@ String errorMsg = (String)request.getAttribute("errorMsg");
 <body>
 <h1>芝ちゃんねる スレッド作成</h1>
 <h2>スレッドタイトルを入力してください</h2>
-<form action="/docoTsubu/Login" method="post">
+<form action="/docoTsubu/CreateThread" method="post">
 <input type="text" name="dTitle">
 <input type="submit" value="作成"><br>
 <% if(errorMsg != null) { %>
