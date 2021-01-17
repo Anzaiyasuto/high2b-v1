@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @WebServlet("/Logout")
-public class Logout extends HttpServlet {
-	private static final long serailVersionUID = 1L;
+public class LogoutServlet extends HttpServlet {
+
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();

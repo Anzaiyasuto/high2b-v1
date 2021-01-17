@@ -53,7 +53,7 @@ public class dThreadDAO {
 			pStmt.setTimestamp(3, thread.getData());
 
 			int result = pStmt.executeUpdate();
-			int result1 = createStmt.executeUpdate();
+			createStmt.executeUpdate();
 
 
 			if(result != 1) {
@@ -64,5 +64,28 @@ public class dThreadDAO {
 			return false;
 		}
 		return true;
+	}
+
+	public dThread findTitle(int threadId) {
+		// TODO 自動生成されたメソッド・スタブ
+
+		dThread thread = null;
+		try(Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
+			String sql = "SELECT * FROM DTHREAD WHERE ID = " + threadId + " ";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			ResultSet rs = pStmt.executeQuery();
+
+			while(rs.next()) {
+				int id = rs.getInt("ID");
+				String dTitle = rs.getString("DTITLE");
+				Timestamp dt = rs.getTimestamp("DTIME");
+				thread = new dThread(id, dTitle, dt);
+			}
+			return thread;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return thread;
+
 	}
 }

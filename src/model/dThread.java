@@ -7,6 +7,7 @@ public class dThread {
 	private String dTitle;
 	private Timestamp dTime;
 
+
 	public dThread(int id, String dTitle, Timestamp dTime) {
 		this.id = id;
 		this.dTitle = dTitle;

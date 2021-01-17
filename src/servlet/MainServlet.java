@@ -13,24 +13,28 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import model.GetMutterListLogic;
+import model.GetThreadTitleLogic;
 import model.Mutter;
 import model.PostMutterLogic;
 import model.User;
+import model.dThread;
 
 @WebServlet("/Main")
-public class Main extends HttpServlet {
+public class MainServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private int id;
-	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//スレッド名に対応するIDを取得する
 		request.setCharacterEncoding("UTF-8");
 		String temp = request.getParameter("id");
 		id	= Integer.parseInt(temp);
 
-
-
+		GetThreadTitleLogic getThreadTitleLogic = new GetThreadTitleLogic();
+		dThread thread = getThreadTitleLogic.execute(id);
+		if(thread != null) {
+			request.setAttribute("thread", thread);
+		}
 		GetMutterListLogic getMutterListLogic = new GetMutterListLogic();
 		List<Mutter> mutterList = getMutterListLogic.execute(id);
 		request.setAttribute("mutterList", mutterList);
@@ -45,7 +49,7 @@ public class Main extends HttpServlet {
 		} else {
 
 
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/thread.jsp");
 			dispatcher.forward(request, response);
 		}
 	}
@@ -62,6 +66,8 @@ public class Main extends HttpServlet {
 		GetMutterListLogic getMutterListLogic = new GetMutterListLogic();
 		//最新のデータベースを取得する
 		List<Mutter> mutterList = getMutterListLogic.execute(id);
+
+
 
 		if(text != null && text.length() != 0) {
 			HttpSession session = request.getSession();
@@ -85,9 +91,8 @@ public class Main extends HttpServlet {
 		//mutterListをセッションスコープに入れる
 		request.setAttribute("mutterList", mutterList);
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/thread.jsp");
 		dispatcher.forward(request, response);
-		int i = 0;
 	}
 
 	public static void main(String[] args) {

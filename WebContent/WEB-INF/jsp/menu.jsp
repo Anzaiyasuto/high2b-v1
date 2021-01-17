@@ -9,16 +9,16 @@ List<dThread> threadList = (List<dThread>) request.getAttribute("threadList");
 <html>
 <head>
 <meta charset="UTF-8">
-<title>どこつぶ</title>
+<title>芝ちゃんねる</title>
 </head>
 <body>
-<h1>どこつぶログイン</h1>
+<h1>芝ちゃんねる メニュー画面</h1>
 <% if(loginUser != null) { %>
-	<p>ログインに成功しました</p>
 	<p>ようこそ<%= loginUser.getName() %>さん</p>
-	<a href="/docoTsubu/Main">つぶやき投稿・閲覧へ</a>
 	<a href="/docoTsubu/CreateThread">新規スレッドを作成する</a>
 	<a href="/docoTsubu/Logout">ログアウト</a>
+	<br>
+
 
 	<%if(threadList != null) { %>
 	<%	int i = 1;
@@ -26,8 +26,7 @@ List<dThread> threadList = (List<dThread>) request.getAttribute("threadList");
 
 		<form action="/docoTsubu/Main">
 		<input type="hidden" name="id" value=<%=thread.getId() %>>
-		<input type="submit" value="<%= i %> : <%= thread.getTitle() %>:<%= thread.getData()%> " style="border:none;background-color:transparent;color:blue;text-decoration:underline;width:400px;">
-
+		<input type="submit" value="<%= i %> : <%= thread.getTitle() %>:<%= thread.getData()%> " style="border:none;background-color:transparent;color:blue;text-decoration:underline;">
 		</form>
 
 	<%i++;} %>

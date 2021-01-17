@@ -23,21 +23,39 @@ import model.dThread;
  * Servlet implementation class Login
  */
 @WebServlet("/Login")
-public class Login extends HttpServlet {
+public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Login() {
+    public LoginServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
 
 
+    /*
+     * スレッド作成画面で「キャンセル」が押されたとき
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+    	//スレッドDBにアクセスして、スレッド情報を入手する。その後List<dThread>をリクエストスコープに入れる
+    	GetThreadListLogic getThreadListLogic = new GetThreadListLogic();
+		List<dThread> threadList = getThreadListLogic.execute();
+		request.setAttribute("threadList", threadList);
+
+		//メニュー画面へ遷移
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/menu.jsp");
+		dispatcher.forward(request, response);
+    }
+
+
+
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * ログイン画面、スレッド作成画面、各スレッド画面から呼び出される
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
@@ -91,7 +109,7 @@ public class Login extends HttpServlet {
 
 		request.setAttribute("threadList", threadList);
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/loginResult.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/menu.jsp");
 		dispatcher.forward(request, response);
 
 	}
